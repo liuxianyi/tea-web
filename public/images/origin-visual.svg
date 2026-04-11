@@ -1,0 +1,10 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="36" fill="#EDF4E6"/>
+  <circle cx="932" cy="196" r="112" fill="#D4E2BF"/>
+  <path d="M56 600C196 466 312 402 432 402C552 402 660 472 806 600H56Z" fill="#98B070"/>
+  <path d="M220 600C360 458 448 418 568 418C688 418 792 482 944 600H220Z" fill="#6F8C48"/>
+  <path d="M418 600C522 492 612 454 710 454C808 454 878 500 1028 600H418Z" fill="#5E7A3C"/>
+  <rect x="106" y="108" width="312" height="96" rx="20" fill="#FFF" fill-opacity="0.88"/>
+  <text x="142" y="166" fill="#425A2A" font-size="36" font-family="Arial, sans-serif" font-weight="700">产地环境示意</text>
+  <text x="142" y="214" fill="#6A725D" font-size="24" font-family="Arial, sans-serif">可替换为茶山、耳木和生产过程实拍图</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="48" fill="#F6F2E7"/>
+  <rect x="70" y="80" width="1060" height="740" rx="42" fill="#ECF2E4"/>
+  <circle cx="900" cy="280" r="180" fill="#D4E2BF"/>
+  <path d="M257 660C342 537 408 469 493 414C565 367 688 323 799 321C807 373 806 425 775 473C728 546 624 617 496 666C394 705 319 709 257 660Z" fill="#7C9950"/>
+  <path d="M522 298C603 323 648 373 642 436C635 503 578 556 464 611C423 567 406 525 414 467C426 388 472 334 522 298Z" fill="#5E7A3C"/>
+  <rect x="116" y="126" width="272" height="110" rx="22" fill="#fff" fill-opacity="0.82"/>
+  <text x="150" y="178" fill="#425A2A" font-size="36" font-family="Arial, sans-serif" font-weight="700">高山春茶</text>
+  <text x="150" y="214" fill="#6A725D" font-size="22" font-family="Arial, sans-serif">鲜爽回甘 · 原产地直供</text>
+</svg>
