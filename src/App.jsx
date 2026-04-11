@@ -58,6 +58,7 @@ function ScrollToTop() {
 }
 
 function Layout() {
+  const [menuOpen, setMenuOpen] = useState(false)
   const navItems = [
     { to: '/', label: '首页' },
     { to: '/products', label: '产品中心' },
@@ -70,7 +71,7 @@ function Layout() {
     <div className="site-shell">
       <header className="site-header">
         <div className="container header-row">
-          <NavLink className="brand" to="/">
+          <NavLink className="brand" to="/" onClick={() => setMenuOpen(false)}>
             <span className="brand-mark">茶</span>
             <div>
               <strong>{siteConfig.brandName}</strong>
@@ -78,7 +79,11 @@ function Layout() {
             </div>
           </NavLink>
 
-          <nav className="main-nav" aria-label="主导航">
+          <nav
+            id="main-navigation"
+            className={menuOpen ? 'main-nav main-nav-open' : 'main-nav'}
+            aria-label="主导航"
+          >
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -87,15 +92,31 @@ function Layout() {
                   isActive ? 'nav-link nav-link-active' : 'nav-link'
                 }
                 end={item.to === '/'}
+                onClick={() => setMenuOpen(false)}
               >
                 {item.label}
               </NavLink>
             ))}
           </nav>
 
-          <a className="header-contact" href={`tel:${siteConfig.phone}`}>
-            电话咨询
-          </a>
+          <div className="header-actions">
+            <a className="header-contact" href={`tel:${siteConfig.phone}`}>
+              <span className="desktop-only">电话咨询</span>
+              <span className="mobile-only">拨号</span>
+            </a>
+            <button
+              type="button"
+              className={menuOpen ? 'menu-toggle menu-toggle-open' : 'menu-toggle'}
+              onClick={() => setMenuOpen((current) => !current)}
+              aria-expanded={menuOpen}
+              aria-controls="main-navigation"
+              aria-label={menuOpen ? '关闭导航菜单' : '打开导航菜单'}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </div>
       </header>
 
