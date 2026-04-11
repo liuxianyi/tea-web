@@ -1,8 +1,8 @@
 export const siteConfig = {
   brandName: '山野本味',
   tagline: '做茶四十余年，种植木耳四十余年',
-  phone: '138-0000-8888',
-  wechat: 'shanyebenwei',
+  phone: '131-3764-2260',
+  wechat: 'liushoufu13137642260',
   wechatQr: '/images/wechat-qr.svg',
   features: {
     showPrices: false,
@@ -14,21 +14,21 @@ export const heroSlides = [
     id: 'tea',
     title: '高山绿茶，鲜爽回甘',
     description: '主推春茶系列，突出清明前、清明与谷雨茶的层次口感。',
-    image: '/images/hero-tea.svg',
+    image: '/images/products/green-tea/IMG_20260317_165714.jpg',
     productSlug: 'gaoshan-mingqian-lvcha',
   },
   {
     id: 'fungus',
     title: '椴木黑木耳，肉厚脆嫩',
     description: '春耳与冬耳分季精选，兼顾日常采购与送礼场景。',
-    image: '/images/hero-fungus.svg',
+    image: '/images/products/green-tea/IMG_20260317_165716.jpg',
     productSlug: 'duanmu-chuner-hei-muer',
   },
   {
     id: 'gift',
     title: '山野副产，一站了解',
     description: '葛根粉、橡子粉、茶油与农家土鸡蛋，满足多种家庭需求。',
-    image: '/images/hero-gift.svg',
+    image: '/images/products/green-tea/IMG_20260317_165718.jpg',
     productSlug: 'cold-pressed-tea-oil',
   },
 ]
@@ -81,14 +81,21 @@ export const products = [
     subcategory: '清明前',
     summary: '芽叶细嫩，香气清扬，适合作为高端自饮和礼赠首选。',
     description: '精选高山茶园头采鲜叶，冲泡后汤色清亮，入口鲜爽回甘。',
-    specifications: ['125g / 盒', '250g / 礼盒', '冷藏保存更佳'],
+    specifications: ['500g / 盒', '250g / 礼盒', '冷藏保存更佳'],
     sellingPoints: ['头采鲜叶', '嫩香明显', '礼盒包装可选'],
-    price: '¥298 / 125g',
+    price: '¥498 / 500g',
     showPrice: false,
     featured: true,
     hero: true,
-    images: ['/images/hero-tea.svg', '/images/hero-tea.svg'],
-    packageImages: ['/images/package-visual.svg'],
+    images: [
+      '/images/products/green-tea/1196.jpg',
+      '/images/products/green-tea/IMG_20260317_165714.jpg',
+      '/images/products/green-tea/IMG_20260317_165716.jpg',
+      '/images/products/green-tea/IMG_20260317_165718.jpg',
+    ],
+    packageImages: [
+      '/images/packaging/tea/85c39460aa6eb174d99f8270338c9060.jpg',
+    ],
   },
   {
     id: 'p2',
@@ -104,8 +111,15 @@ export const products = [
     showPrice: false,
     featured: true,
     hero: false,
-    images: ['/images/hero-tea.svg'],
-    packageImages: ['/images/package-visual.svg'],
+    images: [
+      '/images/products/green-tea/1196.jpg',
+      '/images/products/green-tea/IMG_20260317_165714.jpg',
+      '/images/products/green-tea/IMG_20260317_165716.jpg',
+      '/images/products/green-tea/IMG_20260317_165718.jpg',
+    ],
+    packageImages: [
+      '/images/packaging/tea/85c39460aa6eb174d99f8270338c9060.jpg',
+    ],
   },
   {
     id: 'p3',
@@ -121,8 +135,15 @@ export const products = [
     showPrice: false,
     featured: false,
     hero: false,
-    images: ['/images/hero-tea.svg'],
-    packageImages: ['/images/package-visual.svg'],
+    images: [
+      '/images/products/green-tea/1196.jpg',
+      '/images/products/green-tea/IMG_20260317_165714.jpg',
+      '/images/products/green-tea/IMG_20260317_165716.jpg',
+      '/images/products/green-tea/IMG_20260317_165718.jpg',
+    ],
+    packageImages: [
+      '/images/packaging/tea/85c39460aa6eb174d99f8270338c9060.jpg',
+    ],
   },
   {
     id: 'p4',
@@ -138,8 +159,15 @@ export const products = [
     showPrice: false,
     featured: true,
     hero: true,
-    images: ['/images/hero-fungus.svg', '/images/hero-fungus.svg'],
-    packageImages: ['/images/package-visual.svg'],
+    images: [
+      '/images/products/green-tea/1196.jpg',
+      '/images/products/green-tea/IMG_20260317_165714.jpg',
+      '/images/products/green-tea/IMG_20260317_165716.jpg',
+      '/images/products/green-tea/IMG_20260317_165718.jpg',
+    ],
+    packageImages: [
+      '/images/packaging/tea/85c39460aa6eb174d99f8270338c9060.jpg',
+    ],
   },
   {
     id: 'p5',
@@ -247,29 +275,29 @@ export const originStories = [
   {
     title: '茶山环境',
     description: '山间云雾、昼夜温差和高海拔环境，形成了绿茶鲜爽回甘的基础。',
-    image: '/images/origin-visual.svg',
+    image: '/images/products/green-tea/1172.jpg',
   },
   {
     title: '木耳种植',
     description: '椴木培植和分季管理，让木耳在自然环境中缓慢生长，口感更扎实。',
-    image: '/images/origin-visual.svg',
+    image: '/images/products/green-tea/1172.jpg',
   },
 ]
 
 export const packagingShowcase = [
   {
     title: '茶叶礼盒包装',
-    image: '/images/package-visual.svg',
+    image: '/images/packaging/tea/d66a27efd982925fffe1d7ac30ab8629.jpg',
     description: '适合送礼和商务场景，保持质朴中带品质感。',
   },
   {
     title: '木耳礼袋包装',
-    image: '/images/package-visual.svg',
+    image: '/images/packaging/tea/f51ccba60ae1dd8e867d76c6b76a9805.jpg',
     description: '强调简洁和识别度，适合线上展示和线下发货。',
   },
   {
     title: '副产礼品包装',
-    image: '/images/package-visual.svg',
+    image: '/images/packaging/tea/fa8dd38d7e383ba6726c4ac8c3d58b38.jpg',
     description: '适合茶油、葛根粉等组合搭配，便于节日伴手礼呈现。',
   },
 ]
