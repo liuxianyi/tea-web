@@ -8,6 +8,11 @@
 - 电话、微信、询盘表单与留言表单
 - 前端演示版留言管理页
 
+## 文档入口
+
+- 修改维护说明：[网站修改指南.md](file:///Users/bytedance/Desktop/worker/tea-web/docs/网站修改指南.md)
+- 设计规格说明：[2026-04-11-product-showcase-site-design.md](file:///Users/bytedance/Desktop/worker/tea-web/docs/superpowers/specs/2026-04-11-product-showcase-site-design.md)
+
 ## 本地开发
 
 安装依赖：
