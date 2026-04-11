@@ -46,11 +46,10 @@ npm run lint
 
 在 [Cloudflare Dashboard](https://dash.cloudflare.com/) 中：
 
-1. 进入 `Workers & Pages`
-2. 点击 `Create application`
-3. 选择 `Pages`
-4. 选择 `Connect to Git`
-5. 授权 GitHub 并选择本仓库
+1. 点击 `+`
+2. 选择 `Pages`
+3. 选择 `Connect to Git`
+4. 授权 GitHub 并选择本仓库
 
 ### 3. 填写构建配置
 
