@@ -14,6 +14,7 @@ import {
   categories,
   heroSlides,
   originStories,
+  packagingProducts,
   packagingShowcase,
   products,
   siteConfig,
@@ -26,6 +27,12 @@ import {
   saveMessage,
   updateMessageStatus,
 } from './storage.js'
+
+const catalogItems = [...products, ...packagingProducts]
+
+function isPackagingItem(item) {
+  return item?.kind === 'packaging' || item?.category === '包装'
+}
 
 function App() {
   return (
@@ -136,8 +143,11 @@ function Layout() {
             <p>微信：{siteConfig.wechat}</p>
           </div>
           <div>
-            <h3>网站定位</h3>
-            <p>产品展示、品牌背书、客户留言与询盘演示闭环。</p>
+            <h3>到店地址</h3>
+            <p>{siteConfig.address}</p>
+            <a href={siteConfig.mapLink} target="_blank" rel="noreferrer">
+              点击导航
+            </a>
           </div>
         </div>
       </footer>
@@ -162,7 +172,7 @@ function HeroCarousel() {
     <section className="hero-carousel section-block">
       <div className="container hero-grid">
         <div className="hero-copy">
-          <span className="eyebrow">产地直供 · 支持灵活咨询</span>
+          <span className="eyebrow">伏山乡产地 · 可选包装</span>
           <h1>{activeSlide.title}</h1>
           <p>{activeSlide.description}</p>
           <div className="hero-actions">
@@ -199,8 +209,8 @@ function CategoryNav() {
       <div className="container">
         <div className="section-heading">
           <span className="eyebrow">产品分类</span>
-          <h2>按品类快速找到感兴趣的产品</h2>
-          <p>支持从首页直达对应分类，绿茶和黑木耳还可继续按子类筛选。</p>
+          <h2>绿茶、黑木耳、副产和包装都可单独查看</h2>
+          <p>绿茶按采摘时间看，黑木耳按季节看，包装可单独查看袋装、铁盒和礼盒。</p>
         </div>
 
         <div className="category-grid">
@@ -227,7 +237,14 @@ function CategoryNav() {
 }
 
 function ProductCard({ product, showPrice }) {
+  const packaging = isPackagingItem(product)
   const shouldShowPrice = showPrice || product.showPrice
+  const priceLabel = packaging ? '包装说明' : '参考价格'
+  const priceText = shouldShowPrice
+    ? product.price
+    : packaging
+      ? '可按需求搭配'
+      : '欢迎咨询获取报价'
 
   return (
     <article className="product-card">
@@ -238,6 +255,7 @@ function ProductCard({ product, showPrice }) {
         <div className="product-meta">
           <span>{product.category}</span>
           {product.subcategory ? <span>{product.subcategory}</span> : null}
+          {product.capacity ? <span>{product.capacity}</span> : null}
         </div>
         <h3>{product.name}</h3>
         <p>{product.summary}</p>
@@ -247,15 +265,15 @@ function ProductCard({ product, showPrice }) {
           ))}
         </ul>
         <div className="price-box">
-          <span>参考价格</span>
-          <strong>{shouldShowPrice ? product.price : '欢迎咨询获取报价'}</strong>
+          <span>{priceLabel}</span>
+          <strong>{priceText}</strong>
         </div>
         <div className="product-actions">
           <Link className="button-secondary" to={`/products/${product.slug}`}>
-            查看详情
+            {packaging ? '查看包装' : '查看详情'}
           </Link>
           <Link className="button-link" to={`/contact?product=${product.name}`}>
-            快速联系
+            {packaging ? '咨询搭配' : '快速联系'}
           </Link>
         </div>
       </div>
@@ -280,11 +298,8 @@ function ContactActions() {
     <div className="contact-actions-card">
       <div className="section-heading left-align">
         <span className="eyebrow">联系方式</span>
-        <h2>欢迎直接电话或微信咨询</h2>
-        <p>
-          当前网站以展示产品和收集线索为主，不做在线支付，便于灵活沟通规格、
-          包装和报价。
-        </p>
+        <h2>电话、微信、地址都可以直接查看</h2>
+        <p>{siteConfig.address}</p>
       </div>
       <div className="contact-action-list">
         <a className="button-primary" href={`tel:${siteConfig.phone}`}>
@@ -293,10 +308,18 @@ function ContactActions() {
         <button type="button" className="button-secondary" onClick={handleCopyWechat}>
           {copied ? '微信号已复制' : `复制微信号：${siteConfig.wechat}`}
         </button>
+        <a
+          className="button-secondary"
+          href={siteConfig.mapLink}
+          target="_blank"
+          rel="noreferrer"
+        >
+          点击导航
+        </a>
       </div>
       <div className="wechat-panel">
         <img src={siteConfig.wechatQr} alt="微信二维码示意图" />
-        <p>支持展示二维码和微信号，当前为前端演示版，可直接替换成真实信息。</p>
+        <p>地址：{siteConfig.address}</p>
       </div>
     </div>
   )
@@ -340,7 +363,7 @@ function InquiryForm() {
     <form className="form-card" onSubmit={handleSubmit}>
       <div className="section-heading left-align">
         <span className="eyebrow">询盘表单</span>
-        <h2>留下需求，我们会主动联系你</h2>
+        <h2>留下想买的产品和包装需求</h2>
       </div>
       <label>
         姓名
@@ -367,7 +390,7 @@ function InquiryForm() {
           value={form.message}
           onChange={handleChange}
           rows="4"
-          placeholder="例如规格、数量、包装方式、是否送礼等"
+          placeholder="例如想要哪款茶、几斤、配什么包装、是否送礼"
           required
         />
       </label>
@@ -417,7 +440,7 @@ function MessageForm() {
     <form className="form-card" onSubmit={handleSubmit}>
       <div className="section-heading left-align">
         <span className="eyebrow">留言表单</span>
-        <h2>有问题可先留言，我们稍后统一回复</h2>
+        <h2>有问题可以留言</h2>
       </div>
       <label>
         姓名
@@ -440,7 +463,7 @@ function MessageForm() {
           value={form.message}
           onChange={handleChange}
           rows="5"
-          placeholder="请填写想咨询的产品、数量或其他问题"
+          placeholder="请填写想咨询的产品、包装或其他问题"
           required
         />
       </label>
@@ -455,7 +478,7 @@ function MessageForm() {
 }
 
 function ProductGallery({ product }) {
-  const gallery = [...product.images, ...product.packageImages]
+  const gallery = [...new Set([...(product.images || []), ...(product.packageImages || [])])]
   const [activeImage, setActiveImage] = useState(gallery[0])
   const [previewOpen, setPreviewOpen] = useState(false)
 
@@ -586,9 +609,9 @@ function HomePage() {
       <section className="section-block">
         <div className="container">
           <div className="section-heading">
-            <span className="eyebrow">热门产品</span>
-            <h2>3 到 5 款主打产品先建立兴趣</h2>
-            <p>首页优先展示主推茶叶和黑木耳，并保留联系入口缩短咨询路径。</p>
+            <span className="eyebrow">当季主推</span>
+            <h2>先看热门茶叶和黑木耳</h2>
+            <p>绿茶、黑木耳和副产都支持直接咨询，可按实际需求配包装。</p>
           </div>
           <div className="product-grid">
             {featuredProducts.map((product) => (
@@ -606,9 +629,9 @@ function HomePage() {
         <div className="container two-column-grid">
           <div>
             <div className="section-heading left-align">
-              <span className="eyebrow">店铺介绍</span>
-              <h2>经营多年，讲得清产地，也拿得出产品</h2>
-              <p>用简洁但真实的内容传递经验、山场环境和原产地直供优势。</p>
+              <span className="eyebrow">地址与现货</span>
+              <h2>到店地址、现货和包装方式都能直接看到</h2>
+              <p>{siteConfig.address}</p>
             </div>
             <div className="story-grid">
               {storyHighlights.map((item) => (
@@ -626,7 +649,7 @@ function HomePage() {
           <div>
             <div className="section-heading left-align">
               <span className="eyebrow">包装展示</span>
-              <h2>兼顾日常采购与礼赠场景</h2>
+              <h2>袋装、铁盒、礼盒都可查看</h2>
             </div>
             <div className="packaging-grid">
               {packagingShowcase.map((pack) => (
@@ -660,12 +683,13 @@ function ProductsPage() {
   const availableSubcategories = useMemo(() => {
     if (activeCategory === '绿茶') return ['全部', '清明前', '清明', '谷雨']
     if (activeCategory === '椴木黑木耳') return ['全部', '春耳', '冬耳']
+    if (activeCategory === '包装') return ['全部', '袋装', '铁盒', '礼盒']
     return ['全部']
   }, [activeCategory])
 
   const filteredProducts = useMemo(
     () =>
-      products.filter((product) => {
+      catalogItems.filter((product) => {
         const categoryMatch = activeCategory === '全部' || product.category === activeCategory
         const subcategoryMatch =
           activeSubcategory === '全部' || product.subcategory === activeSubcategory
@@ -686,7 +710,7 @@ function ProductsPage() {
         <div className="section-heading">
           <span className="eyebrow">产品中心</span>
           <h1 className="page-title">按分类查看全部产品</h1>
-          <p>绿茶支持按采摘时间筛选，黑木耳支持按季节筛选，其余品类按单品展示。</p>
+          <p>绿茶按采摘时间看，黑木耳按季节看，包装可按袋装、铁盒、礼盒查看。</p>
         </div>
 
         <div className="filter-panel">
@@ -742,7 +766,7 @@ function ProductsPage() {
 
 function ProductDetailPage() {
   const { slug } = useParams()
-  const product = products.find((item) => item.slug === slug)
+  const product = catalogItems.find((item) => item.slug === slug)
 
   if (!product) {
     return (
@@ -757,7 +781,14 @@ function ProductDetailPage() {
     )
   }
 
+  const packaging = isPackagingItem(product)
   const shouldShowPrice = siteConfig.features.showPrices || product.showPrice
+  const relatedPackaging = packaging
+    ? []
+    : packagingProducts.filter((item) => product.availablePackaging?.includes(item.slug))
+  const applicableProducts = packaging
+    ? products.filter((item) => product.applicableProducts?.includes(item.slug))
+    : []
 
   return (
     <section className="section-block page-hero-block">
@@ -768,12 +799,18 @@ function ProductDetailPage() {
           <h1 className="page-title detail-title">{product.name}</h1>
           <p className="detail-summary">{product.description}</p>
           <div className="price-box large-price">
-            <span>参考价格</span>
-            <strong>{shouldShowPrice ? product.price : '欢迎咨询获取报价'}</strong>
+            <span>{packaging ? '包装说明' : '参考价格'}</span>
+            <strong>
+              {shouldShowPrice
+                ? product.price
+                : packaging
+                  ? '可按需求搭配'
+                  : '欢迎咨询获取报价'}
+            </strong>
           </div>
 
           <section>
-            <h3>规格说明</h3>
+            <h3>{packaging ? '包装说明' : '规格说明'}</h3>
             <ul className="bullet-list">
               {product.specifications.map((item) => (
                 <li key={item}>{item}</li>
@@ -782,7 +819,7 @@ function ProductDetailPage() {
           </section>
 
           <section>
-            <h3>产品卖点</h3>
+            <h3>{packaging ? '适合用途' : '产品卖点'}</h3>
             <ul className="bullet-list">
               {product.sellingPoints.map((item) => (
                 <li key={item}>{item}</li>
@@ -790,9 +827,38 @@ function ProductDetailPage() {
             </ul>
           </section>
 
+          {packaging && product.capacity ? (
+            <section className="detail-section">
+              <h3>容量</h3>
+              <p className="detail-text">{product.capacity}</p>
+            </section>
+          ) : null}
+
+          {!packaging && relatedPackaging.length ? (
+            <section className="detail-section">
+              <h3>可选包装</h3>
+              <div className="related-grid">
+                {relatedPackaging.map((item) => (
+                  <RelatedCard key={item.slug} item={item} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {packaging && applicableProducts.length ? (
+            <section className="detail-section">
+              <h3>适配产品</h3>
+              <div className="related-grid">
+                {applicableProducts.map((item) => (
+                  <RelatedCard key={item.slug} item={item} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           <div className="detail-actions">
             <Link className="button-primary" to={`/contact?product=${product.name}`}>
-              立即咨询
+              {packaging ? '咨询包装' : '立即咨询'}
             </Link>
             <Link className="button-secondary" to="/products">
               返回产品列表
@@ -804,17 +870,52 @@ function ProductDetailPage() {
   )
 }
 
+function RelatedCard({ item }) {
+  return (
+    <article className="related-card">
+      <img src={item.images[0]} alt={item.name} className="related-card-image" />
+      <div className="related-card-body">
+        <div className="product-meta">
+          <span>{item.category}</span>
+          {item.subcategory ? <span>{item.subcategory}</span> : null}
+          {item.capacity ? <span>{item.capacity}</span> : null}
+        </div>
+        <h4>{item.name}</h4>
+        <p>{item.summary}</p>
+        <Link className="text-link" to={`/products/${item.slug}`}>
+          查看详情
+        </Link>
+      </div>
+    </article>
+  )
+}
+
 function AboutPage() {
   return (
     <section className="section-block page-hero-block">
       <div className="container">
         <div className="section-heading narrow-heading">
           <span className="eyebrow">关于我们</span>
-          <h1 className="page-title">用产地故事和长期经验建立第一层信任</h1>
-          <p>
-            网站重点突出做茶和种植木耳四十余年的积累，让客户不仅看到产品，也能了解背后的
-            山场环境与生产过程。
-          </p>
+          <h1 className="page-title">地址、产地和现货都能直接查看</h1>
+          <p>{siteConfig.address}</p>
+        </div>
+
+        <div className="address-panel">
+          <h2>到店地址</h2>
+          <p>{siteConfig.address}</p>
+          <div className="contact-action-list">
+            <a className="button-primary" href={`tel:${siteConfig.phone}`}>
+              电话联系
+            </a>
+            <a
+              className="button-secondary"
+              href={siteConfig.mapLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              点击导航
+            </a>
+          </div>
         </div>
 
         <div className="story-grid large-story-grid">
@@ -848,8 +949,8 @@ function ContactPage() {
       <div className="container">
         <div className="section-heading narrow-heading">
           <span className="eyebrow">联系我们</span>
-          <h1 className="page-title">电话、微信和表单，三种方式都能快速触达</h1>
-          <p>展示站以主动咨询为核心转化目标，支持客户先问规格、包装、价格与发货方式。</p>
+          <h1 className="page-title">电话、微信、地址都在这里</h1>
+          <p>{siteConfig.address}</p>
         </div>
 
         <div className="contact-page-grid">
@@ -868,8 +969,8 @@ function MessageAdminPage() {
       <div className="container">
         <div className="section-heading narrow-heading">
           <span className="eyebrow">留言管理</span>
-          <h1 className="page-title">前端演示版留言查看与回复状态管理</h1>
-          <p>当前页面不依赖真实后端，使用浏览器本地存储模拟留言与询盘处理闭环。</p>
+          <h1 className="page-title">留言查看与回复状态管理</h1>
+          <p>当前页面仍为前端演示版。</p>
         </div>
 
         <MessageAdminPanel />

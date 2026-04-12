@@ -414,7 +414,8 @@ main {
 }
 
 .story-grid,
-.packaging-grid {
+.packaging-grid,
+.related-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -443,10 +444,12 @@ main {
 .product-card,
 .story-card,
 .pack-card,
+.related-card,
 .contact-actions-card,
 .form-card,
 .admin-card,
 .origin-card,
+.address-panel,
 .detail-panel {
   background: var(--surface);
   border: 1px solid rgba(223, 210, 187, 0.82);
@@ -460,6 +463,7 @@ main {
 .contact-actions-card,
 .form-card,
 .admin-card,
+.address-panel,
 .detail-panel {
   padding: 24px;
 }
@@ -472,7 +476,8 @@ main {
   background: linear-gradient(180deg, rgba(238, 231, 218, 0.2), rgba(243, 235, 222, 0.9));
 }
 
-.product-image {
+.product-image,
+.related-card-image {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
@@ -480,6 +485,24 @@ main {
 
 .product-body {
   padding: 20px;
+}
+
+.related-grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.related-card {
+  overflow: hidden;
+}
+
+.related-card-body {
+  padding: 18px;
+}
+
+.related-card h4 {
+  margin: 12px 0 8px;
 }
 
 .product-meta,
@@ -555,6 +578,7 @@ main {
 }
 
 .pack-card img,
+.related-card img,
 .origin-card img,
 .wechat-panel img {
   width: 100%;
@@ -613,6 +637,23 @@ main {
   padding: 12px 14px;
   border-radius: 14px;
   background: rgba(94, 122, 60, 0.09);
+}
+
+.address-panel {
+  margin-bottom: 28px;
+}
+
+.address-panel h2 {
+  margin-top: 0;
+}
+
+.detail-section {
+  margin-top: 22px;
+}
+
+.detail-text {
+  color: var(--text-muted);
+  margin: 0;
 }
 
 .wechat-panel {
@@ -748,6 +789,11 @@ main {
   background: rgba(243, 235, 222, 0.6);
 }
 
+.site-footer a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .footer-grid {
   gap: 24px;
   justify-content: space-between;
@@ -771,6 +817,7 @@ main {
   .origin-grid,
   .category-grid,
   .product-grid,
+  .related-grid,
   .packaging-grid,
   .story-grid {
     grid-template-columns: 1fr;
@@ -939,10 +986,12 @@ main {
   .category-card,
   .story-card,
   .pack-card,
+  .related-card-body,
   .contact-actions-card,
   .form-card,
   .admin-card,
   .origin-card,
+  .address-panel,
   .detail-panel {
     padding: 18px;
   }
