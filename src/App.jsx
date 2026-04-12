@@ -19,6 +19,7 @@ import {
   products,
   siteConfig,
   storyHighlights,
+  tipsSections,
 } from './siteData.js'
 import {
   getInquiries,
@@ -44,8 +45,18 @@ function App() {
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/:slug" element={<ProductDetailPage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="tips" element={<TipsPage />} />
           <Route path="contact" element={<ContactPage />} />
-          <Route path="messages" element={<MessageAdminPage />} />
+          <Route
+            path="messages"
+            element={
+              siteConfig.features.showMessagesPage ? (
+                <MessageAdminPage />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
           <Route path="home" element={<Navigate to="/" replace />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
@@ -69,10 +80,13 @@ function Layout() {
   const navItems = [
     { to: '/', label: '首页' },
     { to: '/products', label: '产品中心' },
+    { to: '/tips', label: '使用 Tips' },
     { to: '/about', label: '关于我们' },
     { to: '/contact', label: '联系我们' },
-    { to: '/messages', label: '留言管理' },
   ]
+  const visibleNavItems = siteConfig.features.showMessagesPage
+    ? [...navItems, { to: '/messages', label: '留言管理' }]
+    : navItems
 
   return (
     <div className="site-shell">
@@ -91,7 +105,7 @@ function Layout() {
             className={menuOpen ? 'main-nav main-nav-open' : 'main-nav'}
             aria-label="主导航"
           >
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -600,6 +614,7 @@ function MessageAdminPanel() {
 
 function HomePage() {
   const featuredProducts = products.filter((product) => product.featured).slice(0, 5)
+  const showMessages = siteConfig.features.showMessagesPage
 
   return (
     <>
@@ -665,9 +680,9 @@ function HomePage() {
       </section>
 
       <section className="section-block">
-        <div className="container split-contact">
+        <div className={showMessages ? 'container split-contact' : 'container single-contact'}>
           <ContactActions />
-          <MessageForm />
+          {showMessages ? <MessageForm /> : null}
         </div>
       </section>
     </>
@@ -944,6 +959,8 @@ function AboutPage() {
 }
 
 function ContactPage() {
+  const showMessages = siteConfig.features.showMessagesPage
+
   return (
     <section className="section-block page-hero-block">
       <div className="container">
@@ -953,10 +970,48 @@ function ContactPage() {
           <p>{siteConfig.address}</p>
         </div>
 
-        <div className="contact-page-grid">
+        <div className={showMessages ? 'contact-page-grid' : 'contact-page-grid compact-contact-grid'}>
           <ContactActions />
           <InquiryForm />
-          <MessageForm />
+          {showMessages ? <MessageForm /> : null}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function TipsPage() {
+  return (
+    <section className="section-block page-hero-block">
+      <div className="container">
+        <div className="section-heading narrow-heading">
+          <span className="eyebrow">使用 Tips</span>
+          <h1 className="page-title">茶叶冲泡、葛根粉和橡子粉使用说明</h1>
+          <p>这里整理了日常使用中最常见的冲泡、冲制和搭配方法，方便直接查看。</p>
+        </div>
+
+        <div className="tips-grid">
+          {tipsSections.map((section) => (
+            <article className="tips-card" key={section.id}>
+              <div className="section-heading left-align">
+                <span className="eyebrow">使用说明</span>
+                <h2>{section.title}</h2>
+                <p>{section.summary}</p>
+              </div>
+
+              <ol className="tips-list">
+                {section.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
+
+              <div className="tips-notes">
+                {section.notes.map((note) => (
+                  <p key={note}>{note}</p>
+                ))}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
