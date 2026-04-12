@@ -153,8 +153,13 @@ function Layout() {
           </div>
           <div>
             <h3>联系咨询</h3>
-            <p>电话：{siteConfig.phone}</p>
-            <p>微信：{siteConfig.wechat}</p>
+            <div className="footer-contact-row">
+              <div className="footer-contact-text">
+                <p>电话：{siteConfig.phone}</p>
+                <p>微信：{siteConfig.wechat}</p>
+              </div>
+              <img className="footer-qr" src={siteConfig.wechatQr} alt="微信二维码" />
+            </div>
           </div>
           <div>
             <h3>到店地址</h3>
@@ -614,7 +619,6 @@ function MessageAdminPanel() {
 
 function HomePage() {
   const featuredProducts = products.filter((product) => product.featured).slice(0, 5)
-  const showMessages = siteConfig.features.showMessagesPage
 
   return (
     <>
@@ -644,9 +648,9 @@ function HomePage() {
         <div className="container two-column-grid">
           <div>
             <div className="section-heading left-align">
-              <span className="eyebrow">地址与现货</span>
-              <h2>到店地址、现货和包装方式都能直接看到</h2>
-              <p>{siteConfig.address}</p>
+              <span className="eyebrow">伏山乡现货</span>
+              <h2>伏山乡绿茶与山货现货，可按需求搭配包装</h2>
+              <p>绿茶、黑木耳和副产都可咨询现货情况，袋装、铁盒、礼盒可按需求选择。</p>
             </div>
             <div className="story-grid">
               {storyHighlights.map((item) => (
@@ -676,13 +680,6 @@ function HomePage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="section-block">
-        <div className={showMessages ? 'container split-contact' : 'container single-contact'}>
-          <ContactActions />
-          {showMessages ? <MessageForm /> : null}
         </div>
       </section>
     </>
