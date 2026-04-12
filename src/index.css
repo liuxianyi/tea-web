@@ -886,10 +886,13 @@ main {
   .tips-grid,
   .category-grid,
   .product-grid,
-  .related-grid,
   .packaging-grid,
   .story-grid {
     grid-template-columns: 1fr;
+  }
+
+  .related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .header-row {
@@ -1106,5 +1109,11 @@ main {
   .footer-contact-row {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .related-grid {
+    grid-template-columns: 1fr;
   }
 }
