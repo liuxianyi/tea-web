@@ -102,7 +102,7 @@ function Layout() {
           <div className="header-actions">
             <a className="header-contact" href={`tel:${siteConfig.phone}`}>
               <span className="desktop-only">电话咨询</span>
-              <span className="mobile-only">拨号</span>
+              <span className="mobile-only">咨询</span>
             </a>
             <button
               type="button"
