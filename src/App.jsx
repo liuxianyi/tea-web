@@ -35,6 +35,40 @@ function isPackagingItem(item) {
   return item?.kind === 'packaging' || item?.category === '包装'
 }
 
+function getImageFallbackSrc(src) {
+  if (typeof src !== 'string') return null
+  if (src.endsWith('.avif') || src.endsWith('.webp')) {
+    return src.replace(/\.(avif|webp)$/u, '.jpg')
+  }
+  return null
+}
+
+function SmartImage({ src, alt, onError, ...props }) {
+  const [currentSrc, setCurrentSrc] = useState(src)
+
+  useEffect(() => {
+    setCurrentSrc(src)
+  }, [src])
+
+  return (
+    <img
+      {...props}
+      src={currentSrc}
+      alt={alt}
+      onError={(event) => {
+        const fallbackSrc = getImageFallbackSrc(currentSrc)
+
+        if (fallbackSrc && fallbackSrc !== currentSrc) {
+          setCurrentSrc(fallbackSrc)
+          return
+        }
+
+        onError?.(event)
+      }}
+    />
+  )
+}
+
 function App() {
   return (
     <>
@@ -160,7 +194,7 @@ function Layout() {
                   <p>电话：{siteConfig.phone}</p>
                   <p>微信：{siteConfig.wechat}</p>
                 </div>
-                <img className="footer-qr" src={siteConfig.wechatQr} alt="微信二维码" />
+                <SmartImage className="footer-qr" src={siteConfig.wechatQr} alt="微信二维码" />
               </div>
             </div>
             <div>
@@ -239,7 +273,7 @@ function HeroCarousel() {
           </div>
         </div>
         <div className="hero-visual">
-          <img src={activeSlide.image} alt={activeSlide.title} />
+          <SmartImage src={activeSlide.image} alt={activeSlide.title} />
           <div className="hero-visual-card">
             <span>现货咨询</span>
             <strong>支持按斤、按盒、按礼赠场景搭配</strong>
@@ -324,7 +358,7 @@ function FeaturedShowcase({ products: featuredProducts }) {
             aria-label={`查看${leadProduct.name}详情`}
           />
           <div className="featured-lead-image">
-            <img src={leadProduct.images[0]} alt={leadProduct.name} />
+            <SmartImage src={leadProduct.images[0]} alt={leadProduct.name} />
           </div>
           <div className="featured-lead-body">
             <p className="section-kicker">当季主推</p>
@@ -364,7 +398,7 @@ function FeaturedShowcase({ products: featuredProducts }) {
                 to={`/products/${product.slug}`}
                 aria-label={`查看${product.name}详情`}
               />
-              <img src={product.images[0]} alt={product.name} />
+              <SmartImage src={product.images[0]} alt={product.name} />
               <div>
                 <span>{product.category}</span>
                 <h3>{product.name}</h3>
@@ -411,7 +445,7 @@ function OriginShowcase() {
         </div>
 
         <article className="origin-visual-panel">
-          <img src={leadStory.image} alt={leadStory.title} />
+          <SmartImage src={leadStory.image} alt={leadStory.title} />
           <div className="origin-visual-copy">
             <p className="section-kicker">山场与采收</p>
             <h3>{leadStory.title}</h3>
@@ -440,7 +474,7 @@ function PackagingSpotlight() {
               to="/products?category=包装"
               aria-label="查看全部包装"
             />
-            <img src={packagingShowcase[2].image} alt={packagingShowcase[2].title} />
+            <SmartImage src={packagingShowcase[2].image} alt={packagingShowcase[2].title} />
             <div>
               <h3>{packagingShowcase[2].title}</h3>
               <p>{packagingShowcase[2].description}</p>
@@ -458,7 +492,7 @@ function PackagingSpotlight() {
                   to="/products?category=包装"
                   aria-label={`查看${pack.title}`}
                 />
-                <img src={pack.image} alt={pack.title} />
+                <SmartImage src={pack.image} alt={pack.title} />
                 <h3>{pack.title}</h3>
                 <p>{pack.description}</p>
               </article>
@@ -502,7 +536,7 @@ function ProductCard({ product, showPrice }) {
         aria-label={`查看${product.name}详情`}
       />
       <div className="product-image-wrap">
-        <img src={product.images[0]} alt={product.name} className="product-image" />
+        <SmartImage src={product.images[0]} alt={product.name} className="product-image" />
       </div>
       <div className="product-body">
         <div className="product-meta">
@@ -571,7 +605,7 @@ function ContactActions() {
         </a>
       </div>
       <div className="wechat-panel">
-        <img src={siteConfig.wechatQr} alt="微信二维码示意图" />
+        <SmartImage src={siteConfig.wechatQr} alt="微信二维码示意图" />
         <p>地址：{siteConfig.address}</p>
       </div>
     </div>
@@ -743,7 +777,7 @@ function ProductGallery({ product }) {
           className="gallery-preview-button"
           onClick={() => setPreviewOpen(true)}
         >
-          <img src={activeImage} alt={product.name} className="gallery-main-image" />
+          <SmartImage src={activeImage} alt={product.name} className="gallery-main-image" />
         </button>
       </div>
 
@@ -755,7 +789,7 @@ function ProductGallery({ product }) {
             className={activeImage === image ? 'thumb-button active' : 'thumb-button'}
             onClick={() => setActiveImage(image)}
           >
-            <img src={image} alt={`${product.name} 图 ${index + 1}`} />
+            <SmartImage src={image} alt={`${product.name} 图 ${index + 1}`} />
           </button>
         ))}
       </div>
@@ -769,7 +803,7 @@ function ProductGallery({ product }) {
           >
             关闭
           </button>
-          <img src={activeImage} alt={product.name} className="lightbox-image" />
+          <SmartImage src={activeImage} alt={product.name} className="lightbox-image" />
         </div>
       ) : null}
     </div>
@@ -1096,7 +1130,7 @@ function RelatedCard({ item }) {
         to={`/products/${item.slug}`}
         aria-label={`查看${item.name}详情`}
       />
-      <img src={item.images[0]} alt={item.name} className="related-card-image" />
+      <SmartImage src={item.images[0]} alt={item.name} className="related-card-image" />
       <div className="related-card-body">
         <div className="product-meta">
           <span>{item.category}</span>
@@ -1171,7 +1205,7 @@ function AboutPage() {
         <div className="origin-grid">
           {originStories.map((story) => (
             <article className="origin-card" key={story.title}>
-              <img src={story.image} alt={story.title} />
+              <SmartImage src={story.image} alt={story.title} />
               <div>
                 <h2>{story.title}</h2>
                 <p>{story.description}</p>
