@@ -93,10 +93,10 @@ function Layout() {
       <header className="site-header">
         <div className="container header-row">
           <NavLink className="brand" to="/" onClick={() => setMenuOpen(false)}>
-            <span className="brand-mark">茶</span>
-            <div>
+            <span className="brand-mark">山</span>
+            <div className="brand-copy">
               <strong>{siteConfig.brandName}</strong>
-              <span>{siteConfig.tagline}</span>
+              <span>伏山乡产地直连</span>
             </div>
           </NavLink>
 
@@ -146,27 +146,41 @@ function Layout() {
       </main>
 
       <footer className="site-footer">
-        <div className="container footer-grid">
-          <div>
+        <div className="container footer-shell">
+          <div className="footer-lead">
+            <p className="footer-kicker">山里现货，按需搭配</p>
             <h3>{siteConfig.brandName}</h3>
-            <p>{siteConfig.tagline}</p>
+            <p>{siteConfig.tagline}，家用自饮、送礼和包装咨询都可以直接联系。</p>
           </div>
-          <div>
-            <h3>联系咨询</h3>
-            <div className="footer-contact-row">
-              <div className="footer-contact-text">
-                <p>电话：{siteConfig.phone}</p>
-                <p>微信：{siteConfig.wechat}</p>
+          <div className="footer-grid">
+            <div>
+              <h3>联系咨询</h3>
+              <div className="footer-contact-row">
+                <div className="footer-contact-text">
+                  <p>电话：{siteConfig.phone}</p>
+                  <p>微信：{siteConfig.wechat}</p>
+                </div>
+                <img className="footer-qr" src={siteConfig.wechatQr} alt="微信二维码" />
               </div>
-              <img className="footer-qr" src={siteConfig.wechatQr} alt="微信二维码" />
             </div>
-          </div>
-          <div>
-            <h3>到店地址</h3>
-            <p>{siteConfig.address}</p>
-            <a href={siteConfig.mapLink} target="_blank" rel="noreferrer">
-              点击导航
-            </a>
+            <div>
+              <h3>到店地址</h3>
+              <p>{siteConfig.address}</p>
+              <a href={siteConfig.mapLink} target="_blank" rel="noreferrer">
+                点击导航
+              </a>
+            </div>
+            <div>
+              <h3>联系咨询</h3>
+              <div className="footer-actions">
+                <a className="button-primary" href={`tel:${siteConfig.phone}`}>
+                  电话咨询
+                </a>
+                <Link className="button-secondary" to="/contact">
+                  留言咨询
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
@@ -186,14 +200,24 @@ function HeroCarousel() {
   }, [])
 
   const activeSlide = heroSlides[activeIndex]
+  const featuredCopy = [
+    '产地现货直接看图咨询',
+    '绿茶、黑木耳与副产可灵活组合',
+    '袋装、铁盒、礼盒都能按需求搭配',
+  ]
 
   return (
     <section className="hero-carousel section-block">
       <div className="container hero-grid">
         <div className="hero-copy">
-          <span className="eyebrow">伏山乡产地 · 可选包装</span>
+          <span className="eyebrow">伏山乡山货直连</span>
           <h1>{activeSlide.title}</h1>
           <p>{activeSlide.description}</p>
+          <ul className="hero-feature-list">
+            {featuredCopy.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
           <div className="hero-actions">
             <Link className="button-primary" to={`/products/${activeSlide.productSlug}`}>
               查看产品
@@ -216,7 +240,33 @@ function HeroCarousel() {
         </div>
         <div className="hero-visual">
           <img src={activeSlide.image} alt={activeSlide.title} />
+          <div className="hero-visual-card">
+            <span>现货咨询</span>
+            <strong>支持按斤、按盒、按礼赠场景搭配</strong>
+          </div>
         </div>
+      </div>
+    </section>
+  )
+}
+
+function HomeTrustStrip() {
+  const trustItems = [
+    ['产地', '河南信阳商城县伏山乡'],
+    ['现货', '绿茶、黑木耳、副产可直接问'],
+    ['包装', '袋装、铁盒、礼盒都可配'],
+    ['联系', '电话与微信都能直接找到人'],
+  ]
+
+  return (
+    <section className="trust-strip">
+      <div className="container trust-grid">
+        {trustItems.map(([label, value]) => (
+          <article className="trust-item" key={label}>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </article>
+        ))}
       </div>
     </section>
   )
@@ -224,17 +274,21 @@ function HeroCarousel() {
 
 function CategoryNav() {
   return (
-    <section className="section-block muted-section">
+    <section className="section-block section-soft">
       <div className="container">
         <div className="section-heading">
-          <span className="eyebrow">产品分类</span>
-          <h2>绿茶、黑木耳、副产和包装都可单独查看</h2>
-          <p>绿茶按采摘时间看，黑木耳按季节看，包装可单独查看袋装、铁盒和礼盒。</p>
+          <h2>先按想看的品类进</h2>
+          <p>茶叶按采摘时间分，黑木耳按春耳冬耳分，包装和副产也都能单独查看。</p>
         </div>
 
         <div className="category-grid">
           {categories.map((category) => (
-            <article className="category-card" key={category.id}>
+            <article className="category-card card-clickable" key={category.id}>
+              <Link
+                className="card-overlay"
+                to={`/products?category=${category.name}`}
+                aria-label={`查看${category.name}分类`}
+              />
               <h3>{category.name}</h3>
               <p>{category.description}</p>
               <div className="tag-row">
@@ -255,6 +309,181 @@ function CategoryNav() {
   )
 }
 
+function FeaturedShowcase({ products: featuredProducts }) {
+  const [leadProduct, ...otherProducts] = featuredProducts
+
+  if (!leadProduct) return null
+
+  return (
+    <section className="section-block featured-showcase">
+      <div className="container featured-grid">
+        <article className="featured-lead-card card-clickable">
+          <Link
+            className="card-overlay"
+            to={`/products/${leadProduct.slug}`}
+            aria-label={`查看${leadProduct.name}详情`}
+          />
+          <div className="featured-lead-image">
+            <img src={leadProduct.images[0]} alt={leadProduct.name} />
+          </div>
+          <div className="featured-lead-body">
+            <p className="section-kicker">当季主推</p>
+            <h2>{leadProduct.name}</h2>
+            <p>{leadProduct.description}</p>
+            <div className="tag-row">
+              {leadProduct.sellingPoints.map((item) => (
+                <span key={item} className="tag">
+                  {item}
+                </span>
+              ))}
+            </div>
+            <div className="featured-detail-list">
+              {leadProduct.specifications.map((item) => (
+                <div key={item}>
+                  <span />
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+            <div className="hero-actions">
+              <Link className="button-primary" to={`/products/${leadProduct.slug}`}>
+                看这款
+              </Link>
+              <Link className="button-link" to="/products">
+                查看全部产品
+              </Link>
+            </div>
+          </div>
+        </article>
+
+        <div className="featured-side-grid">
+          {otherProducts.map((product) => (
+            <article className="featured-mini-card card-clickable" key={product.id}>
+              <Link
+                className="card-overlay"
+                to={`/products/${product.slug}`}
+                aria-label={`查看${product.name}详情`}
+              />
+              <img src={product.images[0]} alt={product.name} />
+              <div>
+                <span>{product.category}</span>
+                <h3>{product.name}</h3>
+                <p>{product.summary}</p>
+                <Link className="text-link" to={`/products/${product.slug}`}>
+                  查看详情
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function OriginShowcase() {
+  const [leadStory] = originStories
+
+  return (
+    <section className="section-block origin-showcase">
+      <div className="container origin-showcase-grid">
+        <div className="origin-copy-panel">
+          <h2>从山场到家里，买的是看得见的本味</h2>
+          <p>
+            现在的网站先把产地、现货、包装和联系方式说清楚，后续也可以继续补采茶、制茶和发货过程图。
+          </p>
+          <div className="origin-points">
+            {storyHighlights.map((item) => (
+              <article className="origin-point" key={item.title}>
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+          <div className="hero-actions">
+            <Link className="button-primary" to="/about">
+              看产地介绍
+            </Link>
+            <Link className="button-secondary" to="/contact">
+              联系咨询
+            </Link>
+          </div>
+        </div>
+
+        <article className="origin-visual-panel">
+          <img src={leadStory.image} alt={leadStory.title} />
+          <div className="origin-visual-copy">
+            <p className="section-kicker">山场与采收</p>
+            <h3>{leadStory.title}</h3>
+            <p>{leadStory.description}</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  )
+}
+
+function PackagingSpotlight() {
+  return (
+    <section className="section-block muted-section">
+      <div className="container">
+        <div className="section-heading left-align narrow-heading">
+          <span className="eyebrow">包装与送礼</span>
+          <h2>不只是卖货，也把家用和送礼场景一起考虑好</h2>
+          <p>袋装适合日常走货，铁盒更体面，礼盒适合节日和走亲访友，具体都可以按实际数量来配。</p>
+        </div>
+
+        <div className="packaging-spotlight-grid">
+          <div className="packaging-hero-card card-clickable">
+            <Link
+              className="card-overlay"
+              to="/products?category=包装"
+              aria-label="查看全部包装"
+            />
+            <img src={packagingShowcase[2].image} alt={packagingShowcase[2].title} />
+            <div>
+              <h3>{packagingShowcase[2].title}</h3>
+              <p>{packagingShowcase[2].description}</p>
+              <Link className="text-link" to="/products?category=包装">
+                查看全部包装
+              </Link>
+            </div>
+          </div>
+
+          <div className="packaging-side-column">
+            {packagingShowcase.slice(0, 2).map((pack) => (
+              <article className="pack-card compact-pack-card card-clickable" key={pack.title}>
+                <Link
+                  className="card-overlay"
+                  to="/products?category=包装"
+                  aria-label={`查看${pack.title}`}
+                />
+                <img src={pack.image} alt={pack.title} />
+                <h3>{pack.title}</h3>
+                <p>{pack.description}</p>
+              </article>
+            ))}
+
+            <article className="contact-promo-card">
+              <p className="section-kicker">直接联系</p>
+              <h3>想问哪款、几斤、配什么包装，直接说就行</h3>
+              <p>网站先把信息铺开，成交还是尽量走电话或微信，沟通会更快。</p>
+              <div className="hero-actions">
+                <a className="button-primary" href={`tel:${siteConfig.phone}`}>
+                  电话咨询
+                </a>
+                <Link className="button-secondary" to="/contact">
+                  留言咨询
+                </Link>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function ProductCard({ product, showPrice }) {
   const packaging = isPackagingItem(product)
   const shouldShowPrice = showPrice || product.showPrice
@@ -266,7 +495,12 @@ function ProductCard({ product, showPrice }) {
       : '欢迎咨询获取报价'
 
   return (
-    <article className="product-card">
+    <article className="product-card card-clickable">
+      <Link
+        className="card-overlay"
+        to={`/products/${product.slug}`}
+        aria-label={`查看${product.name}详情`}
+      />
       <div className="product-image-wrap">
         <img src={product.images[0]} alt={product.name} className="product-image" />
       </div>
@@ -381,7 +615,7 @@ function InquiryForm() {
   return (
     <form className="form-card" onSubmit={handleSubmit}>
       <div className="section-heading left-align">
-        <span className="eyebrow">询盘表单</span>
+        <span className="eyebrow">咨询表单</span>
         <h2>留下想买的产品和包装需求</h2>
       </div>
       <label>
@@ -414,7 +648,7 @@ function InquiryForm() {
         />
       </label>
       <button type="submit" className="button-primary full-width">
-        提交询盘
+        提交咨询
       </button>
       {submitted ? (
         <p className="form-success">提交成功，演示数据已保存在浏览器本地。</p>
@@ -593,7 +827,7 @@ function MessageAdminPanel() {
 
       <section className="admin-card">
         <div className="section-heading left-align">
-          <span className="eyebrow">询盘记录</span>
+          <span className="eyebrow">咨询记录</span>
           <h2>客户意向</h2>
         </div>
         <div className="record-list">
@@ -623,65 +857,11 @@ function HomePage() {
   return (
     <>
       <HeroCarousel />
+      <HomeTrustStrip />
       <CategoryNav />
-
-      <section className="section-block">
-        <div className="container">
-          <div className="section-heading">
-            <span className="eyebrow">当季主推</span>
-            <h2>先看热门茶叶和黑木耳</h2>
-            <p>绿茶、黑木耳和副产都支持直接咨询，可按实际需求配包装。</p>
-          </div>
-          <div className="product-grid">
-            {featuredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                showPrice={siteConfig.features.showPrices}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-block warm-section">
-        <div className="container two-column-grid">
-          <div>
-            <div className="section-heading left-align">
-              <span className="eyebrow">伏山乡现货</span>
-              <h2>伏山乡绿茶与山货现货，可按需求搭配包装</h2>
-              <p>绿茶、黑木耳和副产都可咨询现货情况，袋装、铁盒、礼盒可按需求选择。</p>
-            </div>
-            <div className="story-grid">
-              {storyHighlights.map((item) => (
-                <article className="story-card" key={item.title}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </article>
-              ))}
-            </div>
-            <Link className="text-link" to="/about">
-              查看更多产地故事
-            </Link>
-          </div>
-
-          <div>
-            <div className="section-heading left-align">
-              <span className="eyebrow">包装展示</span>
-              <h2>袋装、铁盒、礼盒都可查看</h2>
-            </div>
-            <div className="packaging-grid">
-              {packagingShowcase.map((pack) => (
-                <article className="pack-card" key={pack.title}>
-                  <img src={pack.image} alt={pack.title} />
-                  <h3>{pack.title}</h3>
-                  <p>{pack.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <FeaturedShowcase products={featuredProducts} />
+      <OriginShowcase />
+      <PackagingSpotlight />
     </>
   )
 }
@@ -804,77 +984,103 @@ function ProductDetailPage() {
 
   return (
     <section className="section-block page-hero-block">
-      <div className="container product-detail-grid">
-        <ProductGallery product={product} />
-        <div className="detail-panel">
-          <span className="eyebrow">{product.category}</span>
-          <h1 className="page-title detail-title">{product.name}</h1>
-          <p className="detail-summary">{product.description}</p>
-          <div className="price-box large-price">
-            <span>{packaging ? '包装说明' : '参考价格'}</span>
-            <strong>
-              {shouldShowPrice
-                ? product.price
-                : packaging
-                  ? '可按需求搭配'
-                  : '欢迎咨询获取报价'}
-            </strong>
-          </div>
+      <div className="container">
+        <PageHero
+          eyebrow={product.category}
+          title={product.name}
+          description={product.description}
+          compact
+          actions={
+            <>
+              <Link className="button-primary" to={`/contact?product=${product.name}`}>
+                {packaging ? '咨询包装' : '立即咨询'}
+              </Link>
+              <Link className="button-secondary" to="/products">
+                返回产品列表
+              </Link>
+            </>
+          }
+        />
 
-          <section>
-            <h3>{packaging ? '包装说明' : '规格说明'}</h3>
-            <ul className="bullet-list">
-              {product.specifications.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h3>{packaging ? '适合用途' : '产品卖点'}</h3>
-            <ul className="bullet-list">
-              {product.sellingPoints.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-
-          {packaging && product.capacity ? (
-            <section className="detail-section">
-              <h3>容量</h3>
-              <p className="detail-text">{product.capacity}</p>
-            </section>
-          ) : null}
-
-          {!packaging && relatedPackaging.length ? (
-            <section className="detail-section">
-              <h3>可选包装</h3>
-              <div className="related-grid">
-                {relatedPackaging.map((item) => (
-                  <RelatedCard key={item.slug} item={item} />
-                ))}
+        <div className="product-detail-grid">
+          <ProductGallery product={product} />
+          <div className="detail-panel">
+            <div className="detail-topbar">
+              <div className="product-meta">
+                <span>{product.category}</span>
+                {product.subcategory ? <span>{product.subcategory}</span> : null}
+                {product.capacity ? <span>{product.capacity}</span> : null}
               </div>
-            </section>
-          ) : null}
+              <p className="detail-summary">
+                {packaging ? '适合按容量和礼赠场景搭配。' : '可先看图，再按规格和包装需求咨询。'}
+              </p>
+            </div>
+            <div className="price-box large-price">
+              <span>{packaging ? '包装说明' : '参考价格'}</span>
+              <strong>
+                {shouldShowPrice
+                  ? product.price
+                  : packaging
+                    ? '可按需求搭配'
+                    : '欢迎咨询获取报价'}
+              </strong>
+            </div>
 
-          {packaging && applicableProducts.length ? (
-            <section className="detail-section">
-              <h3>适配产品</h3>
-              <div className="related-grid">
-                {applicableProducts.map((item) => (
-                  <RelatedCard key={item.slug} item={item} />
+            <section>
+              <h3>{packaging ? '包装说明' : '规格说明'}</h3>
+              <ul className="bullet-list">
+                {product.specifications.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
-              </div>
+              </ul>
             </section>
-          ) : null}
 
-          <div className="detail-actions">
-            <Link className="button-primary" to={`/contact?product=${product.name}`}>
-              {packaging ? '咨询包装' : '立即咨询'}
-            </Link>
-            <Link className="button-secondary" to="/products">
-              返回产品列表
-            </Link>
+            <section>
+              <h3>{packaging ? '适合用途' : '产品卖点'}</h3>
+              <ul className="bullet-list">
+                {product.sellingPoints.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+
+            {packaging && product.capacity ? (
+              <section className="detail-section">
+                <h3>容量</h3>
+                <p className="detail-text">{product.capacity}</p>
+              </section>
+            ) : null}
+
+            {!packaging && relatedPackaging.length ? (
+              <section className="detail-section">
+                <h3>可选包装</h3>
+                <div className="related-grid">
+                  {relatedPackaging.map((item) => (
+                    <RelatedCard key={item.slug} item={item} />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {packaging && applicableProducts.length ? (
+              <section className="detail-section">
+                <h3>适配产品</h3>
+                <div className="related-grid">
+                  {applicableProducts.map((item) => (
+                    <RelatedCard key={item.slug} item={item} />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            <div className="detail-actions">
+              <Link className="button-primary" to={`/contact?product=${product.name}`}>
+                {packaging ? '咨询包装' : '立即咨询'}
+              </Link>
+              <a className="button-secondary" href={`tel:${siteConfig.phone}`}>
+                电话咨询
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -884,7 +1090,12 @@ function ProductDetailPage() {
 
 function RelatedCard({ item }) {
   return (
-    <article className="related-card">
+    <article className="related-card card-clickable">
+      <Link
+        className="card-overlay"
+        to={`/products/${item.slug}`}
+        aria-label={`查看${item.name}详情`}
+      />
       <img src={item.images[0]} alt={item.name} className="related-card-image" />
       <div className="related-card-body">
         <div className="product-meta">
@@ -902,41 +1113,59 @@ function RelatedCard({ item }) {
   )
 }
 
+function PageHero({ eyebrow, title, description, actions, compact = false }) {
+  return (
+    <div className={compact ? 'page-hero intro-compact' : 'page-hero'}>
+      <div className="page-hero-copy">
+        {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
+        <h1 className="page-title">{title}</h1>
+        <p>{description}</p>
+      </div>
+      {actions ? <div className="page-hero-actions">{actions}</div> : null}
+    </div>
+  )
+}
+
 function AboutPage() {
   return (
     <section className="section-block page-hero-block">
       <div className="container">
-        <div className="section-heading narrow-heading">
-          <span className="eyebrow">关于我们</span>
-          <h1 className="page-title">地址、产地和现货都能直接查看</h1>
-          <p>{siteConfig.address}</p>
-        </div>
+        <PageHero
+          eyebrow="关于我们"
+          title="知道山从哪来，也知道人怎么联系"
+          description="这里把产地位置、现货方向和目前能提供的山货内容集中放在一起，方便先了解再咨询。"
+          actions={
+            <>
+              <a className="button-primary" href={`tel:${siteConfig.phone}`}>
+                电话联系
+              </a>
+              <a
+                className="button-secondary"
+                href={siteConfig.mapLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                点击导航
+              </a>
+            </>
+          }
+        />
 
-        <div className="address-panel">
-          <h2>到店地址</h2>
-          <p>{siteConfig.address}</p>
-          <div className="contact-action-list">
-            <a className="button-primary" href={`tel:${siteConfig.phone}`}>
-              电话联系
-            </a>
-            <a
-              className="button-secondary"
-              href={siteConfig.mapLink}
-              target="_blank"
-              rel="noreferrer"
-            >
-              点击导航
-            </a>
+        <div className="about-overview-grid">
+          <div className="address-panel">
+            <p className="section-kicker">到店地址</p>
+            <h2>{siteConfig.address}</h2>
+            <p>如果要看现货、确认包装或线下自提，可以先电话或微信联系，沟通起来会更快。</p>
           </div>
-        </div>
 
-        <div className="story-grid large-story-grid">
-          {storyHighlights.map((item) => (
-            <article className="story-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-            </article>
-          ))}
+          <div className="story-grid large-story-grid">
+            {storyHighlights.map((item) => (
+              <article className="story-card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
         </div>
 
         <div className="origin-grid">
@@ -961,10 +1190,28 @@ function ContactPage() {
   return (
     <section className="section-block page-hero-block">
       <div className="container">
-        <div className="section-heading narrow-heading">
-          <span className="eyebrow">联系我们</span>
-          <h1 className="page-title">电话、微信、地址都在这里</h1>
-          <p>{siteConfig.address}</p>
+        <PageHero
+          eyebrow="联系我们"
+          title="问产品、问包装、问现货，都能直接找到人"
+          description="如果已经有明确需求，建议直接打电话或加微信；如果还在比较，也可以先把意向产品和数量留言。"
+        />
+
+        <div className="contact-intro-grid">
+          <article className="contact-intro-card">
+            <span>电话</span>
+            <strong>{siteConfig.phone}</strong>
+            <p>适合直接问现货、规格、送礼搭配和发货方式。</p>
+          </article>
+          <article className="contact-intro-card">
+            <span>微信</span>
+            <strong>{siteConfig.wechat}</strong>
+            <p>方便发图片、确认包装细节，也方便后续继续沟通。</p>
+          </article>
+          <article className="contact-intro-card">
+            <span>地址</span>
+            <strong>伏山乡杨桥村</strong>
+            <p>到店前建议先联系，确认人在不在、现货齐不齐。</p>
+          </article>
         </div>
 
         <div className={showMessages ? 'contact-page-grid' : 'contact-page-grid compact-contact-grid'}>

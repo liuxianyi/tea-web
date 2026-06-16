@@ -504,8 +504,8 @@ export const products = [
     featured: false,
     hero: true,
     availablePackaging: [],
-    images: ['/images/hero-gift.svg'],
-    packageImages: ['/images/package-visual.svg'],
+    images: ['/images/packaging/four-boxes/a.webp'],
+    packageImages: ['/images/packaging/four-boxes/c.webp'],
   },
   {
     id: 'p9',
@@ -522,8 +522,8 @@ export const products = [
     featured: false,
     hero: false,
     availablePackaging: [],
-    images: ['/images/hero-gift.svg'],
-    packageImages: ['/images/package-visual.svg'],
+    images: ['/images/packaging/four-boxes/e.webp'],
+    packageImages: ['/images/packaging/four-boxes/d.webp'],
   },
 ]
 
